@@ -1,8 +1,8 @@
 # 다운로드
 최신 소스:
-https://github.com/hatty163/KKuTu/raw/master/files/KKuTu-2.5.zip
-
+[v2.5b](https://github.com/hatty163/KKuTu/raw/master/files/KKuTu-2.5b.zip)
 오래된 소스:
+[v2.5](https://github.com/hatty163/KKuTu/raw/master/files/KKuTu-2.5.zip)
 
 # KKuTu
 - Made by [JJoriping](http://blog.jjo.kr/)
