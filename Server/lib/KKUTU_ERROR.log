@@ -1,0 +1,60 @@
+:8496 [2018-2-13 20:51:00] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8496 [2018-2-13 20:51:42] ERROR: Error: Cannot find module 'kkutu-lib'
+Error: Cannot find module 'kkutu-lib'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\games\drawing.js:26:13)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8496 [2018-2-13 20:51:59] ERROR: SyntaxError: Identifier 'Lizard' has already been declared
+C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\games\drawing.js:27
+const Lizard = lib.lizard;
+      ^
+
+SyntaxError: Identifier 'Lizard' has already been declared
+    at createScript (vm.js:80:10)
+    at Object.runInThisContext (vm.js:152:10)
+    at Module._compile (module.js:624:28)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.exports.init (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\kkutu.js:62:13):8496 [2018-2-13 20:59:16] ERROR: TypeError: $c.drawingCanvas is not a function
+TypeError: $c.drawingCanvas is not a function
+    at Object.KKuTu.onClientMessage (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\slave.js:187:7)
+    at WebSocket.<anonymous> (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\kkutu.js:302:11)
+    at WebSocket.emit (events.js:159:13)
+    at Receiver.ontext (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\WebSocket.js:841:10)
+    at C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:536:18
+    at Receiver.applyExtensions (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:371:5)
+    at C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:508:14
+    at Receiver.flush (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:347:3)
+    at Receiver.finish (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:541:12)
+    at Receiver.expectHandler (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:493:33):8496 [2018-2-13 21:05:20] ERROR: TypeError: $c.drawingCanvas is not a function
+TypeError: $c.drawingCanvas is not a function
+    at Object.KKuTu.onClientMessage (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\slave.js:187:7)
+    at WebSocket.<anonymous> (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\Game\kkutu.js:302:11)
+    at WebSocket.emit (events.js:159:13)
+    at Receiver.ontext (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\WebSocket.js:841:10)
+    at C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:536:18
+    at Receiver.applyExtensions (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:371:5)
+    at C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:508:14
+    at Receiver.flush (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:347:3)
+    at Receiver.finish (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:541:12)
+    at Receiver.expectHandler (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:493:33)

@@ -1,24 +1,19 @@
 /**
  * Rule the words! KKuTu Online
  * Copyright (C) 2017 JJoriping(op@jjo.kr)
- *
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * 볕뉘 수정사항:
- * Login 을 Passport 로 수행하기 위한 수정
  */
 
 var WS		 = require("ws");
@@ -30,14 +25,10 @@ var Parser	 = require("body-parser");
 var DDDoS	 = require("dddos");
 var Server	 = Express();
 var DB		 = require("./db");
-//볕뉘 수정 구문삭제 (28)
 var JLog	 = require("../sub/jjlog");
 var WebInit	 = require("../sub/webinit");
 var GLOBAL	 = require("../sub/global.json");
-var Secure = require('../sub/secure');
-//볕뉘 수정
 var passport = require('passport');
-//볕뉘 수정 끝
 var Const	 = require("../const");
 var https	 = require('https');
 var fs		 = require('fs');
@@ -46,11 +37,9 @@ var Language = {
 	'ko_KR': require("./lang/ko_KR.json"),
 	'en_US': require("./lang/en_US.json")
 };
-//볕뉘 수정
 var ROUTES = [
 	"major", "consume", "admin", "login"
 ];
-//볕뉘 수정 끝
 var page = WebInit.page;
 var gameServers = [];
 
@@ -66,17 +55,14 @@ Server.set('view engine', "pug");
 Server.use(Express.static(__dirname + "/public"));
 Server.use(Parser.urlencoded({ extended: true }));
 Server.use(Exession({
-	/* use only for redis-installed
-
 	store: new Redission({
 		client: Redis.createClient(),
 		ttl: 3600 * 12
-	}),*/
+	}),
 	secret: 'kkutu',
 	resave: false,
 	saveUninitialized: true
 }));
-//볕뉘 수정
 Server.use(passport.initialize());
 Server.use(passport.session());
 Server.use((req, res, next) => {
@@ -92,36 +78,16 @@ Server.use((req, res, next) => {
 			res.status(302).redirect(url);
 		} else {
 			next();
-		}
+					}
 	} else {
 		next();
 	}
 });
-//볕뉘 수정 끝
-/* use this if you want
-
-DDDoS = new DDDoS({
-	maxWeight: 6,
-	checkInterval: 10000,
-	rules: [{
-		regexp: "^/(cf|dict|gwalli)",
-		maxWeight: 20,
-		errorData: "429 Too Many Requests"
-	}, {
-		regexp: ".*",
-		errorData: "429 Too Many Requests"
-	}]
-});
-DDDoS.rules[0].logFunction = DDDoS.rules[1].logFunction = function(ip, path){
-	JLog.warn(`DoS from IP ${ip} on ${path}`);
-};
-Server.use(DDDoS.express());*/
-
 WebInit.init(Server, true);
 DB.ready = function(){
 	setInterval(function(){
 		var q = [ 'createdAt', { $lte: Date.now() - 3600000 * 12 } ];
-
+		
 		DB.session.remove(q).on();
 	}, 600000);
 	setInterval(function(){
@@ -131,14 +97,14 @@ DB.ready = function(){
 		});
 	}, 4000);
 	JLog.success("DB is ready.");
-
+	
 	DB.kkutu_shop_desc.find().on(function($docs){
 		var i, j;
-
+		
 		for(i in Language) flush(i);
 		function flush(lang){
 			var db;
-
+			
 			Language[lang].SHOP = db = {};
 			for(j in $docs){
 				db[$docs[j]._id] = [ $docs[j][`name_${lang}`], $docs[j][`desc_${lang}`] ];
@@ -147,7 +113,16 @@ DB.ready = function(){
 	});
 	Server.listen(80);
 	if(Const.IS_SECURED) {
-		const options = Secure();
+		const options = {};
+		if(Const.SSL_OPTIONS.isPFX == true) {
+			options.pfx = fs.readFileSync(Const.SSL_OPTIONS.PFX);
+		} else {
+			options.key = fs.readFileSync(Const.SSL_OPTIONS.PRIVKEY);
+			options.cert = fs.readFileSync(Const.SSL_OPTIONS.CERT);
+			if(Const.SSL_OPTIONS.isCA == true) {
+				options.ca = fs.readFileSync(Const.SSL_OPTIONS.CA);
+			}
+		}
 		https.createServer(options, Server).listen(443);
 	}
 };
@@ -163,14 +138,14 @@ Const.MAIN_PORTS.forEach(function(v, i){
 });
 function GameClient(id, url){
 	var my = this;
-
+	
 	my.id = id;
 	my.socket = new WS(url, { perMessageDeflate: false, rejectUnauthorized: false});
 	
 	my.send = function(type, data){
 		if(!data) data = {};
 		data.type = type;
-
+		
 		my.socket.send(JSON.stringify(data));
 	};
 	my.socket.on('open', function(){
@@ -187,9 +162,9 @@ function GameClient(id, url){
 	my.socket.on('message', function(data){
 		var _data = data;
 		var i;
-
+		
 		data = JSON.parse(data);
-
+		
 		switch(data.type){
 			case "seek":
 				my.seek = data.value;
@@ -222,7 +197,7 @@ Server.get("/", function(req, res){
 	});
 	function onFinish($doc){
 		var id = req.session.id;
-
+		
 		if($doc){
 			req.session.profile = $doc.profile;
 			id = $doc.profile.sid;
@@ -255,10 +230,9 @@ Server.get("/", function(req, res){
 		});
 	}
 });
-
 Server.get("/servers", function(req, res){
 	var list = [];
-
+	
 	gameServers.forEach(function(v, i){
 		list[i] = v.seek;
 	});

@@ -18,7 +18,7 @@
 
 (function(){
 	var $stage;
-	var LIMIT = 400;
+	var LIMIT = 200;
 	var LIST;
 
 	$(document).ready(function(){
@@ -29,6 +29,10 @@
 			ref: $("#server-refresh"),
 			refi: $("#server-refresh>i")
 		};
+
+        if ($("#account-info").html() !== L['LOGIN']) {
+            $('#captcha-container').empty();
+        }
 
 		$("#Background").attr('src', "").addClass("jt-image").css({
 			'background-image': "url(/img/kkutu/gamebg.png)",

@@ -20,12 +20,20 @@ var WebSocket = require('ws');
 var File = require('fs');
 var Const = require("../const");
 var https = require('https');
-var secure = require('../sub/secure');
 var Server;
 var HTTPS_Server
 
 if(Const.IS_SECURED) {
-	const options = Secure();
+	const options = {};
+	if(Const.SSL_OPTIONS.isPFX == true) {
+		options.pfx = File.readFileSync(Const.SSL_OPTIONS.PFX);
+	} else {
+		options.key = File.readFileSync(Const.SSL_OPTIONS.PRIVKEY);
+		options.cert = File.readFileSync(Const.SSL_OPTIONS.CERT);
+		if(Const.SSL_OPTIONS.isCA == true) {
+			options.ca = File.readFileSync(Const.SSL_OPTIONS.CA);
+		}
+	}
 	HTTPS_Server = https.createServer(options)
 		.listen(global.test ? (Const.TEST_PORT + 416) : process.env['KKUTU_PORT']);
 	Server = new WebSocket.Server({server: HTTPS_Server});
@@ -175,6 +183,8 @@ KKuTu.onClientMessage = function($c, msg){
 	if(!msg) return;
 	
 	switch(msg.type){
+		case 'drawingCanvas':
+			$c.drawingCanvas(msg);
 		case 'yell':
 			if(!msg.value) return;
 			if(!$c.admin) return;
@@ -251,6 +261,22 @@ KKuTu.onClientMessage = function($c, msg){
 				if(msg.mode < 0 || msg.mode >= MODE_LENGTH) stable = false;
 				if(msg.round < 1 || msg.round > 10){
 					msg.code = 433;
+					stable = false;
+				}
+				if (msg.opts.beginner && $c.lv($c.data.score) > 50) {
+					msg.code = 4030;
+					stable = false;
+				}
+				else if (msg.opts.medium && $c.lv($c.data.score) > 100 && $c.lv($c.data.score) < 50) {
+					msg.code = 4030;
+					stable = false;
+				}
+				else if (msg.opts.high && $c.lv($c.data.score) > 200 && $c.lv($c.data.score) < 100) {
+					msg.code = 4030;
+					stable = false;
+				}
+				else if (msg.opts.veryhigh && $c.lv($c.data.score) > 300 && $c.lv($c.data.score) < 200) {
+					msg.code = 4030;
 					stable = false;
 				}
 				if(ENABLE_ROUND_TIME.indexOf(msg.time) == -1) stable = false;

@@ -31,6 +31,7 @@ var Rule;
 var guestProfiles = [];
 var CHAN;
 var channel = process.env['CHANNEL'] || 0;
+var passRecaptcha = false;
 
 const NUM_SLAVES = 4;
 const GUEST_IMAGE = "/img/kkutu/guest.png";
@@ -124,7 +125,7 @@ exports.Robot = function(target, place, level){
 	my.place = place;
 	my.target = target;
 	my.equip = { robot: true };
-	
+
 	my.getData = function(){
 		return {
 			id: my.id,
@@ -304,6 +305,15 @@ exports.Client = function(socket, profile, sid){
 		}
 	};
 	*/
+	my.drawingCanvas = function(msg) {
+		let $room = ROOM[my.place];
+		
+		if(!$room) return;
+		if(!$room.gaming) return;
+		if($room.rule.rule != 'Drawing') return;
+		
+		$room.drawingCanvas(msg);
+	};
 	my.getData = function(gaming){
 		var o = {
 			id: my.id,
@@ -367,8 +377,7 @@ exports.Client = function(socket, profile, sid){
 		if(Cluster.isWorker && type == 'user') process.send({ type: "user-publish", data: data });
 	};
 	my.chat = function(msg, code){
-		if(my.noChat) return my.send('chat', { notice: true, code: 443 });
-		my.publish('chat', { value: msg, notice: code ? true : false, code: code });
+			my.publish('chat', { value: msg, notice: code ? true : false, code: code });
 	};
 	my.checkExpire = function(){
 		var now = new Date();
@@ -400,60 +409,64 @@ exports.Client = function(socket, profile, sid){
 			my.send('expired', { list: expired });
 			my.flush(my.box, my.equip);
 		}
-	};
-	my.refresh = function(){
-		var R = new Lizard.Tail();
-		
-		if(my.guest){
-			my.equip = {};
-			my.data = new exports.Data();
-			my.money = 0;
-			my.friends = {};
-			
-			R.go({ result: 200 });
-		}else DB.users.findOne([ '_id', my.id ]).on(function($user){
-			var first = !$user;
-			var black = first ? "" : $user.black;
-			
-			if(first) $user = { money: 0 };
-			if(black == "null") black = false;
-			if(black == "chat"){
-				black = false;
-				my.noChat = true;
-			}
-			/* 망할 셧다운제
-			if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
-				my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
-				if(my.isAjae === null){
-					if(my._birth) my._checkAjae = setTimeout(function(){
-						my.sendError(442);
-						my.socket.close();
-					}, 300000);
-					else{
-						my.sendError(441);
-						my.socket.close();
-						return;
-					}
-				}
-			}*/
-			my.exordial = $user.exordial || "";
-			my.equip = $user.equip || {};
-			my.box = $user.box || {};
-			my.data = new exports.Data($user.kkutu);
-			my.money = Number($user.money);
-			my.friends = $user.friends || {};
-			if(first) my.flush();
-			else{
-				my.checkExpire();
-				my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
-			}
-			if(black) R.go({ result: 444, black: black });
-			else if(Cluster.isMaster && $user.server) R.go({ result: 409, black: $user.server });
-			else if(exports.NIGHT && my.isAjae === false) R.go({ result: 440 });
-			else R.go({ result: 200 });
-		});
-		return R;
-	};
+    };
+    my.refresh = function () {
+        var R = new Lizard.Tail();
+
+        if (my.guest) {
+            my.equip = {};
+            my.data = new exports.Data();
+            my.money = 0;
+            my.friends = {};
+
+            R.go({result: 200});
+        } else {
+        	DB.VendorDBMigration.processVendorMigration(my.id, function () {
+                DB.users.findOne(['_id', my.id]).on(function ($user) {
+                    var first = !$user;
+                    var black = first ? "" : $user.black;
+
+                    if (first) $user = {money: 0};
+                    if (black == "null") black = false;
+                    if (black == "chat") {
+                        black = false;
+                        my.noChat = true;
+                    }
+                    /* 망할 셧다운제
+                    if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
+                        my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
+                        if(my.isAjae === null){
+                            if(my._birth) my._checkAjae = setTimeout(function(){
+                                my.sendError(442);
+                                my.socket.close();
+                            }, 300000);
+                            else{
+                                my.sendError(441);
+                                my.socket.close();
+                                return;
+                            }
+                        }
+                    }*/
+                    my.exordial = $user.exordial || "";
+                    my.equip = $user.equip || {};
+                    my.box = $user.box || {};
+                    my.data = new exports.Data($user.kkutu);
+                    my.money = Number($user.money);
+                    my.friends = $user.friends || {};
+                    if (first) my.flush();
+                    else {
+                        my.checkExpire();
+                        my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
+                    }
+                    if (black) R.go({result: 444, black: black});
+                    else if (Cluster.isMaster && $user.server) R.go({result: 409, black: $user.server});
+                    else if (exports.NIGHT && my.isAjae === false) R.go({result: 440});
+                    else R.go({result: 200});
+                });
+            });
+        }
+        return R;
+    };
 	my.flush = function(box, equip, friends){
 		var R = new Lizard.Tail();
 		
@@ -477,6 +490,31 @@ exports.Client = function(socket, profile, sid){
 		});
 		return R;
 	};
+	var MAX_LEVEL = 720;
+	var EXP = [];
+	function getRequiredScore(lv){
+		return Math.round(
+			(!(lv%5)*0.3 + 1) * (!(lv%15)*0.4 + 1) * (!(lv%45)*0.5 + 1) * (
+				120 + Math.floor(lv/5)*60 + Math.floor(lv*lv/225)*120 + Math.floor(lv*lv/2025)*180
+			)
+		);
+	}
+	EXP.push(getRequiredScore(1));
+	for(i=2; i<MAX_LEVEL; i++){
+		EXP.push(EXP[i-2] + getRequiredScore(i));
+	}
+	EXP[MAX_LEVEL - 1] = Infinity;
+	EXP.push(Infinity);
+	exports.getScore = _level => EXP[_level - 1];
+	my.lv = _score => {
+	    var score = typeof _score == 'object' ? _score.data.score : _score,
+	        a = EXP.length,
+	        b = 1;
+	    for (; b <= a; b++)
+	        if (score < EXP[b - 1])
+				break;
+	    return b;
+	};
 	my.invokeWordPiece = function(text, coef){
 		if(!my.game.wpc) return;
 		var v;
@@ -489,7 +527,6 @@ exports.Client = function(socket, profile, sid){
 	};
 	my.enter = function(room, spec, pass){
 		var $room, i;
-		
 		if(my.place){
 			my.send('roomStuck');
 			JLog.warn(`Enter the room ${room.id} in the place ${my.place} by ${my.id}!`);
@@ -497,9 +534,9 @@ exports.Client = function(socket, profile, sid){
 		}else if(room.id){
 			// 이미 있는 방에 들어가기... 여기서 유효성을 검사한다.
 			$room = ROOM[room.id];
-			
+
 			if(!$room){
-				if(Cluster.isMaster){
+				if(CLUSTER.isMaster){
 					for(i in CHAN) CHAN[i].send({ type: "room-invalid", room: room });
 				}else{
 					process.send({ type: "room-invalid", room: room });
@@ -509,10 +546,41 @@ exports.Client = function(socket, profile, sid){
 			if(!spec){
 				if($room.gaming){
 					return my.send('error', { code: 416, target: $room.id });
-				}else if(my.guest) if(!GUEST_PERMISSION.enter){
-					return my.sendError(401);
+				}else if(my.guest) {
+                    if (!GUEST_PERMISSION.enter) {
+                        return my.sendError(401);
+                    }
+                }
+            	else if($room.opts.beginner && my.lv() > 50){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
+				}
+            	else if($room.opts.medium && my.lv() > 100 && my.lv() < 50){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
+				}
+            	else if($room.opts.high && my.lv() > 200 && my.lv() < 100){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
+				}
+            	else if($room.opts.veryhigh && my.lv() > 300 && my.lv() < 200){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
 				}
 			}
+
 			if($room.players.length >= $room.limit + (spec ? Const.MAX_OBSERVER : 0)){
 				return my.sendError(429);
 			}
@@ -566,7 +634,34 @@ exports.Client = function(socket, profile, sid){
 					my.sendError(409);
 				}
 				$room = new exports.Room(room, getFreeChannel());
-				
+				if($room.opts.beginner && my.lv() > 50){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
+				}
+            	if($room.opts.medium && my.lv() > 100 && my.lv() < 50){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
+				}
+            	if($room.opts.high && my.lv() > 200 && my.lv() < 100){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
+				}
+            	if($room.opts.veryhigh && my.lv() > 300 && my.lv() < 200){
+					if (my.guest) {
+						return my.sendError(4030)
+					} else {
+						return my.sendError(4031);
+					}
+				}
 				process.send({ type: "room-new", target: my.id, room: $room.getData() });
 				ROOM[$room.id] = $room;
 				spec = false;
@@ -1040,6 +1135,9 @@ exports.Room = function(room, channel){
 			})) return 414;
 		}
 		return false;
+	};
+	my.drawingCanvas = function(msg) {
+		my.byMaster('drawCanvas', { data: msg.data }, true);
 	};
 	my.ready = function(){
 		var i, all = true;

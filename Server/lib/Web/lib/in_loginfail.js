@@ -16,11 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * 볕뉘 수정사항:
- * Login 실패 페이지 제작을 위한 파일 생성
- */
-
 (function(){
 	$(document).ready(function(){
 	});

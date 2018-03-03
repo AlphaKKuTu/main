@@ -14,9 +14,6 @@
 	
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
-//-
-	볕뉘 수정사항:
-	* Login 을 Passport 로 수행하기 위한 수정
 
 include module
 
@@ -27,11 +24,15 @@ html
 		+PageHead()
 	body
 		span#locale= JSON.stringify(LANG)
-		//볕뉘 수정 구문삭제(30)
 		div.login-with= locals.text ? L(locals.text) : L('loginWith')
-		//볕뉘 수정
-		each val in loginList
-			a(href="/login/" + val.vendor)
-				button(style="color: " + val.fontColor + "; background-color: " + val.color + ";")= L(val.displayName)
-		//볕뉘 수정 끝
+		a(href="/login/naver")
+			button.with-naver= L('withNaver')
+		a(href="/login/facebook")
+			button.with-facebook= L('withFacebook')
+		a(href="/login/google")
+			button.with-google= L('withGoogle')
+		a(href="/login/twitter")
+			button.with-twitter= L('withTwitter')
+		a(href="/login/kakao")
+			button.with-kakao= L('withKakao')
 		div.login-legal!= L('loginLegal')

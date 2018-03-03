@@ -14,30 +14,28 @@
 	
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
-//-
-	볕뉘 수정사항:
-	* Login 을 Passport 로 수행하기 위한 수정
 -
 	const MENU = [
-		{ key: 'HOME', href: "http://jjo.kr/" },
-		/*{ key: 'DB', sub: [
-			{ key: 'DB_CHAMP', href: "/db/champion" },
-			{ key: 'DB_ITEM', href: "/db/item" },
-			{ key: 'DB_RUNE', href: "/db/rune" },
-			{ key: 'DB_MASTERY', href: "/db/mastery" }
-		]},*/
+		{ key: 'HOME', href: "http://xn--vz0b065d.xn--t60b56a/" },
 		{ key: 'GAMES', sub: [
 			{ key: 'GAMES_KKUTU', href: "/" },
-			{ key: 'GAMES_FATES', href: "http://jjo.kr/game/fates" }
+			{ key: 'APPLICATION', href: "http://xn--vz0b065d.xn--t60b56a/app.html" }
+
 		]},
-		{ key: 'GALLERY', href: "http://jjo.kr/gallery" }
+		{ key: 'ALLIANCE', sub: [
+			{ key: 'ARTSDAYO', href: "https://artsdayo.com/" },
+			{ key: 'SQUARENET', href: "https://squarenet.kr/" },
+			{ key: 'VEATYOU', href: "http://veatyou.xyz/" },
+			{ key: 'LITE', href: "http://litekkutu.xyz:90/" }
+		]},
+		{ key: 'FORUM', href: "http://xn--cm2bx42c.xn--vz0b065d.xn--t60b56a" },
 	];
-	const PUBLIC = locals.published;
+
+		const PUBLIC = locals.published;
 	
 	var DATA = locals.data || {};
 	var LANG = locals.locale;
 	var SESSION = locals.session;
-
 	function L(id){
 		var R = LANG[id] || "(L#"+id+")", i;
 		
@@ -55,7 +53,6 @@
 		for(i in res) res[i] = ((res[i] < 10) ? "0" : "") + res[i];
 		return res.join("").toString();
 	};
-
 mixin Menu()
 	div.Menu
 		- for(i in MENU)
@@ -154,4 +151,4 @@ mixin ChartBar(c, data)
 			- var r = data[i].last ? total : (data[i].value / sum * 100);
 			- total -= r;
 			div.chart-bar.ellipse(style='width: '+r+'%; background-color: '+data[i].color+';')= data[i].label || ''
-				+Expl(data[i].label ? (data[i].label + ' ' + r.toFixed(1) + '%') : undefined)
+				+Expl(data[i].label ? (data[i].label + ' ' + r.toFixed(1) + '%') : hatty163)

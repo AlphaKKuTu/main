@@ -208,21 +208,8 @@ function checkAge(){
 function onMessage(data){
 	var i;
 	var $target;
-
-    switch (data.type) {
-        case 'recaptcha':
-            var $introText = $("#intro-text");
-            $introText.empty();
-            $introText.html('게스트는 캡챠 인증이 필요합니다.' +
-                '<br/>로그인을 하시면 캡챠 인증을 건너뛰실 수 있습니다.' +
-                '<br/><br/>');
-            $introText.append($('<div class="g-recaptcha" id="recaptcha" style="display: table; margin: 0 auto;"></div>'));
-
-            grecaptcha.render('recaptcha', {
-                'sitekey': data.siteKey,
-                'callback': recaptchaCallback
-            });
-            break;
+	
+	switch(data.type){
 		case 'welcome':
 			$data.id = data.id;
 			$data.guest = data.guest;
@@ -293,6 +280,11 @@ function onMessage(data){
 				chat(data.profile || { title: L['robot'] }, data.value, data.from, data.timestamp);
 			}
 			break;
+		case 'drawCanvas':
+			if ($stage.game.canvas) {
+				drawCanvas(data)
+			}
+			break
 		case 'roomStuck':
 			rws.close();
 			break;
@@ -505,10 +497,6 @@ function onMessage(data){
 			break;
 	}
 	if($data._record) recordEvent(data);
-
-    function recaptchaCallback(response) {
-        ws.send(JSON.stringify({type: 'recaptcha', token: response}));
-    }
 }
 function welcome(){
 	playBGM('lobby');
@@ -964,6 +952,15 @@ function userListBar(o, forInvite){
 function addonNickname($R, o){
 	if(o.equip['NIK']) $R.addClass("x-" + o.equip['NIK']);
 	if(o.equip['BDG'] == "b1_gm") $R.addClass("x-gm");
+	if(o.equip['BDG'] == "b1_planner") $R.addClass("x-planner");
+	if(o.equip['BDG'] == "b1_designer") $R.addClass("x-designer");
+	if(o.equip['BDG'] == "b1_bgm") $R.addClass("x-bgm");
+	if(o.equip['BDG'] == "b1_video") $R.addClass("x-video");
+	if(o.equip['BDG'] == "b1_bj") $R.addClass("x-bj");
+	if(o.equip['BDG'] == "b1_yt") $R.addClass("x-yt");
+	if(o.equip['BDG'] == "b1_tw") $R.addClass("x-tw");
+	if(o.equip['BDG'] == "b1_word") $R.addClass("x-word");
+	if(o.equip['BDG'] == "vip") $R.addClass("x-vip");
 }
 function updateRoomList(refresh){
 	var i;
@@ -1895,24 +1892,27 @@ function recordEvent(data){
 	});
 }
 function clearBoard(){
-	$data._relay = false;
-	loading();
-	$stage.game.here.hide();
-	$stage.dialog.result.hide();
-	$stage.dialog.dress.hide();
-	$stage.dialog.charFactory.hide();
-	$(".jjoriping,.rounds,.game-body").removeClass("cw");
-	$stage.game.display.empty();
-	$stage.game.chain.hide();
-	$stage.game.hints.empty().hide();
-	$stage.game.cwcmd.hide();
-	$stage.game.bb.hide();
-	$stage.game.round.empty();
-	$stage.game.history.empty();
-	$stage.game.items.show().css('opacity', 0);
-	$(".jjo-turn-time .graph-bar").width(0).css({ 'float': "", 'text-align': "", 'background-color': "" });
-	$(".jjo-round-time .graph-bar").width(0).css({ 'float': "", 'text-align': "" }).removeClass("round-extreme");
-	$(".game-user-bomb").removeClass("game-user-bomb");
+	$data._relay = false
+	loading()
+	$stage.game.here.hide()
+	$stage.dialog.result.hide()
+	$stage.dialog.dress.hide()
+	$stage.dialog.charFactory.hide()
+	$('.jjoriping,.rounds,.game-body').removeClass('cw')
+	$('.jjoriping,.rounds').removeClass('dg')
+	$('.rounds').removeClass('painter')
+	$stage.game.display.empty()
+	$stage.game.chain.hide()
+	$stage.game.hints.empty().hide()
+	$stage.game.tools.hide()
+	$stage.game.cwcmd.hide()
+	$stage.game.bb.hide()
+	$stage.game.round.empty()
+	$stage.game.history.empty()
+	$stage.game.items.show().css('opacity', 0)
+	$('.jjo-turn-time .graph-bar').width(0).css({ 'float': '', 'text-align': '', 'background-color': '' })
+	$('.jjo-round-time .graph-bar').width(0).css({ 'float': '', 'text-align': '' }).removeClass('round-extreme')
+	$('.game-user-bomb').removeClass('game-user-bomb')
 }
 function drawRound(round){
 	var i;
@@ -2715,6 +2715,9 @@ function chat(profile, msg, from, timestamp){
 	}
 	addonNickname($bar, { equip: equip });
 	$stage.chat.scrollTop(999999999);
+}
+function drawCanvas (data) {
+	route('drawCanvas', data)
 }
 function notice(msg, head){
 	var time = new Date();

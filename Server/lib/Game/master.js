@@ -1,17 +1,17 @@
 /**
  * Rule the words! KKuTu Online
  * Copyright (C) 2017 JJoriping(op@jjo.kr)
- *
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,8 +26,7 @@ var KKuTu = require('./kkutu');
 var GLOBAL = require("../sub/global.json");
 var Const = require("../const");
 var JLog = require('../sub/jjlog');
-var Secure = require('../sub/secure');
-var Recaptcha = require('../sub/recaptcha');
+var Recaptcha = require('../sub/recaptcha'); 
 
 var MainDB;
 
@@ -56,7 +55,7 @@ const GUEST_PERMISSION = exports.GUEST_PERMISSION = {
 	'kickVote': true,
 	'wp': true
 };
-const ENABLE_ROUND_TIME = exports.ENABLE_ROUND_TIME = [ 10, 30, 60, 90, 120, 150 ];
+const ENABLE_ROUND_TIME = exports.ENABLE_ROUND_TIME = [ 10, 30, 60, 90, 120, 150, 180 ];
 const ENABLE_FORM = exports.ENABLE_FORM = [ "S", "J" ];
 const MODE_LENGTH = exports.MODE_LENGTH = Const.GAME_TYPE.length;
 const PORT = process.env['KKUTU_PORT'];
@@ -104,6 +103,16 @@ function processAdmin(id, value){
 				temp.send('test');
 				if(DIC[id]) DIC[id].send('tail', { a: i ? "tuX" : "tu", rid: temp.id, id: id, msg: temp.getData() });
 			}
+			return null;
+		case "ip":
+			try{
+				if(DIC[value]) {
+					if (DIC[id]) DIC[id].send('tail', { a: "IP CHECK", rid: value, id: "", msg: DIC[value].socket.upgradeReq.connection.remoteAddress });
+					else JLog.log("ERROR ON CHECKING IP: Receiver ["+id+"] does not exists!");
+				} else
+					JLog.log("ERROR ON CHECKING IP: Target ["+id+"] does not exists!");
+			}
+			catch(e){console.log(e);}
 			return null;
 		case "dump":
 			if(DIC[id]) DIC[id].send('yell', { value: "This feature is not supported..." });
@@ -275,7 +284,16 @@ exports.init = function(_SID, CHAN){
 		
 		MainDB.users.update([ 'server', SID ]).set([ 'server', "" ]).on();
 		if(Const.IS_SECURED) {
-			const options = Secure();
+			const options = {};
+			if(Const.SSL_OPTIONS.isPFX == true) {
+				options.pfx = File.readFileSync(Const.SSL_OPTIONS.PFX);
+			} else {
+				options.key = File.readFileSync(Const.SSL_OPTIONS.PRIVKEY);
+				options.cert = File.readFileSync(Const.SSL_OPTIONS.CERT);
+				if(Const.SSL_OPTIONS.isCA == true) {
+					options.ca = File.readFileSync(Const.SSL_OPTIONS.CA);
+				}
+			}
 			HTTPS_Server = https.createServer(options)
 				.listen(global.test ? (Const.TEST_PORT + 416) : process.env['KKUTU_PORT']);
 			Server = new WebSocket.Server({server: HTTPS_Server});
@@ -343,8 +361,8 @@ exports.init = function(_SID, CHAN){
 						DIC[$c.id] = $c;
 						DNAME[($c.profile.title || $c.profile.name).replace(/\s/g, "")] = $c.id;
 						MainDB.users.update([ '_id', $c.id ]).set([ 'server', SID ]).on();
-
-						if (($c.guest && GLOBAL.GOOGLE_RECAPTCHA_TO_GUEST) || GLOBAL.GOOGLE_RECAPTCHA_TO_USER) {
+						
+						if ($c.guest) {
 							$c.socket.send(JSON.stringify({
 								type: 'recaptcha',
 								siteKey: GLOBAL.GOOGLE_RECAPTCHA_SITE_KEY
@@ -365,13 +383,12 @@ exports.init = function(_SID, CHAN){
 				});
 			});
 		});
-		Server.on('error', function (err) {
+		Server.on('error', function(err){
 			JLog.warn("Error on ws: " + err.toString());
 		});
 		KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION, CHAN);
 	};
 };
-
 function joinNewUser($c) {
 	$c.send('welcome', {
 		id: $c.id,
@@ -413,6 +430,9 @@ KKuTu.onClientMessage = function ($c, msg) {
 					$c.socket.close();
 				}
 			});
+		} else {
+			// 캽챠 인증이 되기 전의 요청은 전부 차단
+			JLog.warn("block request: " + JSON.stringify(msg));
 		}
 	}
 };
@@ -422,130 +442,128 @@ function processClientRequest($c, msg) {
 	var temp;
 	var now = (new Date()).getTime();
 	
-	switch (msg.type) {
+	if(!msg) return;
+	
+	switch(msg.type){
 		case 'yell':
-			if (!msg.value) return;
-			if (!$c.admin) return;
-
-			$c.publish('yell', {value: msg.value});
+			if(!msg.value) return;
+			if(!$c.admin) return;
+			
+			$c.publish('yell', { value: msg.value });
 			break;
 		case 'refresh':
 			$c.refresh();
 			break;
 		case 'talk':
-			if (!msg.value) return;
-			if (!msg.value.substr) return;
-			if (!GUEST_PERMISSION.talk) if ($c.guest) {
-				$c.send('error', {code: 401});
+			if(!msg.value) return;
+			if(!msg.value.substr) return;
+			if(!GUEST_PERMISSION.talk) if($c.guest){
+				$c.send('error', { code: 401 });
 				return;
 			}
 			msg.value = msg.value.substr(0, 200);
-			if ($c.admin) {
-				if (!processAdmin($c.id, msg.value)) break;
+			if($c.admin){
+				if(!processAdmin($c.id, msg.value)) break;
 			}
 			checkTailUser($c.id, $c.place, msg);
-			if (msg.whisper) {
+			if(msg.whisper){
 				msg.whisper.split(',').forEach(v => {
-					if (temp = DIC[DNAME[v]]) {
-						temp.send('chat', {
-							from: $c.profile.title || $c.profile.name,
-							profile: $c.profile,
-							value: msg.value
-						});
-					} else {
+					if(temp = DIC[DNAME[v]]){
+						temp.send('chat', { from: $c.profile.title || $c.profile.name, profile: $c.profile, value: msg.value });
+					}else{
 						$c.sendError(424, v);
 					}
 				});
-			} else {
+			}else{
 				$c.chat(msg.value);
 			}
 			break;
 		case 'friendAdd':
-			if (!msg.target) return;
-			if ($c.guest) return;
-			if ($c.id == msg.target) return;
-			if (Object.keys($c.friends).length >= 100) return $c.sendError(452);
-			if (temp = DIC[msg.target]) {
-				if (temp.guest) return $c.sendError(453);
-				if ($c._friend) return $c.sendError(454);
+			if(!msg.target) return;
+			if($c.guest) return;
+			if($c.id == msg.target) return;
+			if(Object.keys($c.friends).length >= 100) return $c.sendError(452);
+			if(temp = DIC[msg.target]){
+				if(temp.guest) return $c.sendError(453);
+				if($c._friend) return $c.sendError(454);
 				$c._friend = temp.id;
-				temp.send('friendAdd', {from: $c.id});
-			} else {
+				temp.send('friendAdd', { from: $c.id });
+			}else{
 				$c.sendError(450);
 			}
 			break;
 		case 'friendAddRes':
-			if (!(temp = DIC[msg.from])) return;
-			if (temp._friend != $c.id) return;
-			if (msg.res) {
+			if(!(temp = DIC[msg.from])) return;
+			if(temp._friend != $c.id) return;
+			if(msg.res){
 				// $c와 temp가 친구가 되었다.
 				$c.addFriend(temp.id);
 				temp.addFriend($c.id);
 			}
-			temp.send('friendAddRes', {target: $c.id, res: msg.res});
+			temp.send('friendAddRes', { target: $c.id, res: msg.res });
 			delete temp._friend;
 			break;
 		case 'friendEdit':
-			if (!$c.friends) return;
-			if (!$c.friends[msg.id]) return;
+			if(!$c.friends) return;
+			if(!$c.friends[msg.id]) return;
 			$c.friends[msg.id] = (msg.memo || "").slice(0, 50);
 			$c.flush(false, false, true);
-			$c.send('friendEdit', {friends: $c.friends});
+			$c.send('friendEdit', { friends: $c.friends });
 			break;
 		case 'friendRemove':
-			if (!$c.friends) return;
-			if (!$c.friends[msg.id]) return;
+			if(!$c.friends) return;
+			if(!$c.friends[msg.id]) return;
 			$c.removeFriend(msg.id);
 			break;
 		case 'enter':
 		case 'setRoom':
-			if (!msg.title) stable = false;
-			if (!msg.limit) stable = false;
-			if (!msg.round) stable = false;
-			if (!msg.time) stable = false;
-			if (!msg.opts) stable = false;
-
+			if(!msg.title) stable = false;
+			if(!msg.limit) stable = false;
+			if(!msg.round) stable = false;
+			if(!msg.time) stable = false;
+			if(!msg.opts) stable = false;
+			
 			msg.code = false;
 			msg.limit = Number(msg.limit);
 			msg.mode = Number(msg.mode);
 			msg.round = Number(msg.round);
 			msg.time = Number(msg.time);
-
-			if (isNaN(msg.limit)) stable = false;
-			if (isNaN(msg.mode)) stable = false;
-			if (isNaN(msg.round)) stable = false;
-			if (isNaN(msg.time)) stable = false;
-
-			if (stable) {
-				if (msg.title.length > 20) stable = false;
-				if (msg.password.length > 20) stable = false;
-				if (msg.limit < 2 || msg.limit > 8) {
+			
+			if(isNaN(msg.limit)) stable = false;
+			if(isNaN(msg.mode)) stable = false;
+			if(isNaN(msg.round)) stable = false;
+			if(isNaN(msg.time)) stable = false;
+			
+			if(stable){
+				if(msg.title.length > 20) stable = false;
+				if(msg.password.length > 20) stable = false;
+				if(msg.limit < 2 || msg.limit > 8){
 					msg.code = 432;
 					stable = false;
 				}
-				if (msg.mode < 0 || msg.mode >= MODE_LENGTH) stable = false;
-				if (msg.round < 1 || msg.round > 10) {
+				if(msg.mode < 0 || msg.mode >= MODE_LENGTH) stable = false;
+				if(msg.round < 1 || msg.round > 10){
 					msg.code = 433;
 					stable = false;
 				}
-				if (ENABLE_ROUND_TIME.indexOf(msg.time) == -1) stable = false;
+				if(ENABLE_ROUND_TIME.indexOf(msg.time) == -1) stable = false;
 			}
-			if (msg.type == 'enter') {
-				if (msg.id || stable) $c.enter(msg, msg.spectate);
+			if(msg.type == 'enter'){
+				if(msg.id || stable) $c.enter(msg, msg.spectate);
 				else $c.sendError(msg.code || 431);
-			} else if (msg.type == 'setRoom') {
-				if (stable) $c.setRoom(msg);
+			}else if(msg.type == 'setRoom'){
+				if(stable) $c.setRoom(msg);
 				else $c.sendError(msg.code || 431);
 			}
 			break;
 		case 'inviteRes':
-			if (!(temp = ROOM[msg.from])) return;
-			if (!GUEST_PERMISSION.inviteRes) if ($c.guest) return;
-			if ($c._invited != msg.from) return;
-			if (msg.res) {
-				$c.enter({id: $c._invited}, false, true);
-			} else {
-				if (DIC[temp.master]) DIC[temp.master].send('inviteNo', {target: $c.id});
+			if(!(temp = ROOM[msg.from])) return;
+			if(!GUEST_PERMISSION.inviteRes) if($c.guest) return;
+			if($c._invited != msg.from) return;
+			if(msg.res){
+				$c.enter({ id: $c._invited }, false, true);
+			}else{
+				if(DIC[temp.master]) DIC[temp.master].send('inviteNo', { target: $c.id });
 			}
 			delete $c._invited;
 			break;
@@ -566,8 +584,7 @@ function processClientRequest($c, msg) {
 		default:
 			break;
 	}
-}
-
+};
 KKuTu.onClientClosed = function($c, code){
 	delete DIC[$c.id];
 	if($c._error != 409) MainDB.users.update([ '_id', $c.id ]).set([ 'server', "" ]).on();

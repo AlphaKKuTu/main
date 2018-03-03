@@ -69,7 +69,8 @@ $(document).ready(function(){
 			exit: $("#ExitBtn"),
 			notice: $("#NoticeBtn"),
 			replay: $("#ReplayBtn"),
-			leaderboard: $("#LeaderboardBtn")
+			leaderboard: $("#LeaderboardBtn"),
+			bulletin: $("#BulletinBtn")
 		},
 		dialog: {
 			setting: $("#SettingDiag"),
@@ -129,7 +130,8 @@ $(document).ready(function(){
 			chatLog: $("#ChatLogDiag"),
 			obtain: $("#ObtainDiag"),
 				obtainOK: $("#obtain-ok"),
-			help: $("#HelpDiag")
+			help: $("#HelpDiag"),
+			bulletin: $("#BulletinDiag")
 		},
 		box: {
 			chat: $(".ChatBox"),
@@ -143,6 +145,9 @@ $(document).ready(function(){
 		game: {
 			display: $(".jjo-display"),
 			hints: $(".GameBox .hints"),
+			tools: $('.GameBox .tools'),
+			drawingTitle: $('#drawing-title'),
+			themeisTitle: $('#themeis-title'),
 			cwcmd: $(".GameBox .cwcmd"),
 			bb: $(".GameBox .bb"),
 			items: $(".GameBox .items"),
@@ -598,6 +603,10 @@ $(document).ready(function(){
 			showDialog($stage.dialog.leaderboard);
 		});
 	});
+	$stage.menu.bulletin.on('click', function(e){
+		$("#bulletin-board").attr('src', "/kkt_notice.html");
+		showDialog($stage.dialog.bulletin);
+	});
 	$stage.dialog.lbPrev.on('click', function(e){
 		$(e.currentTarget).attr('disabled', true);
 		$.get("/ranking?p=" + ($data._lbpage - 1), function(res){
@@ -974,7 +983,25 @@ $(document).ready(function(){
 			);*/
 		};
 		ws.onmessage = _onMessage = function(e){
-			onMessage(JSON.parse(e.data));
+			var data = JSON.parse(e.data);
+
+			if (data.type === 'recaptcha') {
+				var $introText = $("#intro-text");
+				$introText.empty();
+				$introText.html('게스트는 캡챠 인증이 필요합니다.' +
+					'<br/>로그인을 하시면 캡챠 인증을 건너뛰실 수 있습니다.' +
+					'<br/><br/>');
+				$introText.append($('<div class="g-recaptcha" id="recaptcha" style="display: table; margin: 0 auto;"></div>'));
+
+				grecaptcha.render('recaptcha', {
+					'sitekey': data.siteKey,
+					'callback': recaptchaCallback
+				});
+
+				return;
+			}
+
+			onMessage(data);
 		};
 		ws.onclose = function(e){
 			var ct = L['closed'] + " (#" + e.code + ")";
@@ -989,5 +1016,11 @@ $(document).ready(function(){
 		ws.onerror = function(e){
 			console.warn(L['error'], e);
 		};
+
+		function recaptchaCallback(response) {
+			ws.send(JSON.stringify({type: 'recaptcha', token: response}));
+			
+			delete window.setTimeout;
+		}
 	}
 });

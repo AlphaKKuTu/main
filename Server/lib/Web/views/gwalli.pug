@@ -17,35 +17,35 @@
 extends layout
 
 block Subject
-	title *** JJO.KR 관리 페이지 ***
+	title kPanel 끄투닷넷 컨트롤 패널
 
 block JS
 	script(type="text/javascript", src="/js/in_admin.min.js")
 	
 block Middle
 	fieldset
-		legend 자격
-		input#db-password(type='password', placeholder='암호')
-		input#db-lang(placeholder='테이블')
+		legend 자격증명
+		input#db-password(type='password', placeholder='암호 Password')
+		input#db-lang(placeholder='테이블명 Table Name')
 	fieldset
-		legend 추가 요청 받기
+		legend 단어 추가 요청 조회
 		div
-			button#injeong-go 조회
+			button#injeong-go 조회하기
 			div
 				table
 					thead: tr
-						td 승인?
+						td 승인 여부
 						td 링크
 						td #
 						td theme
 						td writer
 						td createdAt
 					tbody#injeong-data
-			button#injeong-everything 모두 승인
-			button#injeong-nothing 모두 거절
-			button#injeong-apply 적용
+			button#injeong-everything 모두 승인하기
+			button#injeong-nothing 모두 거절하기
+			button#injeong-apply 적용 Apply
 	fieldset
-		legend 상점 DB 다루기
+		legend 상점 데이터베이스 다루기
 		div
 			input#shop-word(placeholder='품목 (~ALL)')
 			button#shop-go 조회
@@ -68,11 +68,11 @@ block Middle
 			button#shop-add 추가
 			button#shop-apply 적용
 	fieldset
-		legend 유저 DB 다루기
+		legend 유저 데이터베이스 다루기
 		div
-			input#user-id(placeholder='ID')
-			input#user-nick(placeholder='닉네임')
-			button#user-go 조회
+			input#user-id(placeholder='유저 ID')
+			input#user-nick(placeholder='유저 닉네임')
+			button#user-go 조회하기
 			div
 				table
 					thead: tr
@@ -91,8 +91,8 @@ block Middle
 	fieldset
 		legend 유저 감시하기
 		div
-			input#gamsi-id(placeholder='ID (,로 구분)')
-			button#gamsi-go 감시
+			input#gamsi-id(placeholder='유저ID (,로 구분)')
+			button#gamsi-go 감시 시작
 			div
 				table
 					thead: tr
@@ -101,7 +101,7 @@ block Middle
 						td 서버
 					tbody#gamsi-data
 	fieldset
-		legend 끄투 DB 다루기
+		legend 끄투 데이터베이스 다루기
 		div
 			input#db-word(placeholder='단어')
 			button#db-go 조회
@@ -121,14 +121,8 @@ block Middle
 			button#word-add 추가
 			button#db-apply 적용
 	fieldset
-		legend 끄투 DB에 단어 추가하기
+		legend 끄투에 단어 추가하기
 		div
 			input#db-theme(placeholder='주제 (~부터 적으면 검색)')
 			textarea#db-list(rows=20, cols=100)
 			button#db-ok 확인
-	fieldset
-		legend 끄투에서의 인기 단어
-		button#kpw-query 조회
-		textarea#kpw-html
-		div#kpw-table
-		button#kpw-flush 반영

@@ -1,6 +1,7 @@
 //-
 	Rule the words! KKuTu Online
 	Copyright (C) 2017 JJoriping(op@jjo.kr)
+	Copyright (C) 2017 GodTu(admin@godtu.cf)
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,33 +24,81 @@ block CSS
 	link(rel='stylesheet', href='/css/in_game_kkutu.css')
 
 block Middle
+
 	+separator(5)
-	div(style='float: left; width: 100%;')
-		div(style='float: left; padding-left: 70px;')
+	br
+	div.jjoriping(style='margin: 0 auto; width: 325px;')
+		div(style='margin-bottom: -110px; padding-left: 70px;')
 			h3#holder= L('title').replace(/\[.+?\]/g, "")
 			img#logo(src='/img/kkutu/short_logo.png')
-		div#menu-bar(style='float: right; margin-top: 25px;')
-			a(target='_blank', href='//cafe.naver.com/sdbx', style='background-color: #63A95B;')= L('sandbox')
-			a(target='_blank', href='//blog.jjo.kr/', style='background-color: #4078DC;')= L('CREATOR')
-		div.jjoriping(style='margin-top: 40px;')
-			img.jjoObj.jjoEyeL(src='/img/jjoeyeL.png', style='left: -270px;')
-			img.jjoObj.jjoNose(src='/img/jjonose.png', style='left: -170px;')
-			img.jjoObj.jjoEyeR(src='/img/jjoeyeR.png', style='left: -70px;')
-			div.jjoDisplayBar(style='width: 325px; height: 85px;')
+		img.jjoObj.jjoEyeL(src='/img/jjoeyeL.png', style='left: 0px; margin-top: 40px;')
+		img.jjoObj.jjoNose(src='/img/jjonose.png', style='left: 100px; margin-bottom: -5px; margin-top: 40px;')
+		img.jjoObj.jjoEyeR(src='/img/jjoeyeR.png', style='left: 200px; margin-top: 40px;')
+		a(href=L('svstart'))
+			div.jjoDisplayBar(style='margin: 0 auto; width: 325px; height: 85px;')
 				button#game-start.jjo-display= L('gameStart')
-	div(style='float: right; margin-top: -120px; width: 50%;')
-		div.server-list-box
-			h3.server-list-title
-				a#server-refresh
-					+FA('refresh')
-					+Expl(L('serverRefresh'))
-				label= L('serverList')
-				label#server-total(style='color: #AAA; font-size: 13px;')
-			div#server-list
-	div(style='float: left; width: calc(100% - 4px); border: 2px solid #CCC; margin-top: 10px; background-color: #EEE;')
-		iframe#kkutu-bulletin(width='100%', height='400px', src='/kkutu_bulletin.html')
+	+separator(5)
+	div.leftmenu(style='float: left; width: 151px;')
+		a(href='https://discord.gg/g9Yd8Cy', target='_blank')
+			img#discord(src='/img/kkutu/ko_KR/discord.png', width="150px")
+		br
+		a(href='https://cafe.naver.com/kkutunet', target='_blank')
+			img#discord(src='/img/kkutu/ko_KR/navercafe.png', width="150px")
+		h3.server-list-title
+			a#server-refresh
+				+FA('refresh')
+				+Expl(L('serverRefresh'))
+			label= L('serverList')
+			label#server-total(style='color: #AAA; font-size: 13px;')
+		div#server-list
+
+	div(style='float: right; width: calc(50% - 78px);')
+		div(style='float: right; width: 100% ; background-color: #00D8FF; color: black;')
+			font(size=2, style='color: white;') &nbsp;끄투닷넷 공지사항
+		br
+		div(style='float: right; width: 100%; background-color: #FFFFFF;')
+			iframe#kkutu-bulletin(width='100%', height='400px', src='/notice.html')
+
+	div(style='float: left; width: calc(50% - 80px); margin-left: 5px;')
+		div(style='float: right; width: 100% ; background-color: #00D8FF; color: black;')
+			font(size=2, style='color: white;') &nbsp;끄투닷넷 이벤트
+		br
+		div(style='float: right; width: 100%; background-color: #FFFFFF;')
+			iframe#kkutu-bulletin(width='100%', height='400px', src='/event.html')
 	+separator(10)
 
 block Bottom
 	div.bottom-legal!= L('dictionarySupport')
-	div.bottom-legal!= L('etcSupport')
+	block Bottom
+	script.
+		function setParam(name, value) {
+		var l = window.location;
+		/* build params */
+		var params = {};
+		var x = /(?:\\??)([^=&?]+)=?([^&?]*)/g;
+		var s = l.search;
+		for(var r = x.exec(s); r; r = x.exec(s))
+		{
+		r[1] = decodeURIComponent(r[1]);
+		if (!r[2]) r[2] = '%%';
+		params[r[1]] = r[2];
+		}
+		/* set param */
+		params[name] = encodeURIComponent(value);
+		/* build search */
+		var search = [];
+		for(var i in params)
+		{
+		var p = encodeURIComponent(i);
+		var v = params[i];
+		if (v != '%%') p += '=' + v;
+		search.push(p);
+		}
+		search = search.join('&');
+		/* execute search */
+		l.search = search;
+		}
+	div.bottom-legal!="언어를 선택하세요 Please choose the language."
+	a(href="javascript:setParam('locale', 'ko_KR');") 한국어 Korean
+	br
+	a(href="javascript:setParam('locale', 'en_US');") 영어 English

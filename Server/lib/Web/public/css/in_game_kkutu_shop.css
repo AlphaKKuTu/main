@@ -44,9 +44,36 @@
 	}
 
 /* NIK */
-.x-gm .users-name::before{ content: "[GM]"; color: #2F77D9; text-shadow: 0px 0px 2px #2AF; }
-.chat-item>.x-gm::before{ content: "[GM]"; color: #2F77D9; text-shadow: 0px 0px 2px #2AF; }
-.room-user-title>.x-gm::before{ content: "[GM]"; color: #2F77D9; text-shadow: 0px 0px 2px #2AF; }
+.x-gm .users-name::before{ content: "[운영자]"; color: #2F77D9; text-shadow: 0px 0px 2px #2AF; }
+.chat-item>.x-gm::before{ content: "[운영자]"; color: #2F77D9; text-shadow: 0px 0px 2px #2AF; }
+.room-user-title>.x-gm::before{ content: "[운영자]"; color: #2F77D9; text-shadow: 0px 0px 2px #2AF; }
+.x-planner .users-name::before{ content: "[기획자]"; color: #29cf38; text-shadow: 0px 0px 2px #8cfa97; }
+.chat-item>.x-planner::before{ content: "[기획자]"; color: #29cf38; text-shadow: 0px 0px 2px #8cfa97; }
+.room-user-title>.x-planner::before{ content: "[기획자]"; color: #29cf38; text-shadow: 0px 0px 2px #8cfa97; }
+.x-designer .users-name::before{ content: "[디자이너]"; color: #019c88; text-shadow: 0px 0px 2px #7cffee; }
+.chat-item>.x-designer::before{ content: "[디자이너]"; color: #019c88; text-shadow: 0px 0px 2px #7cffee; }
+.room-user-title>.x-designer::before{ content: "[디자이너]"; color: #019c88; text-shadow: 0px 0px 2px #7cffee; }
+.x-bgm .users-name::before{ content: "[브금]"; color: #839f54; text-shadow: 0px 0px 2px #dcffa4; }
+.chat-item>.x-bgm::before{ content: "[브금]"; color: #839f54; text-shadow: 0px 0px 2px #dcffa4; }
+.room-user-title>.x-bgm::before{ content: "[BGM]"; color: #839f54; text-shadow: 0px 0px 2px #dcffa4; }
+.x-video .users-name::before{ content: "[영상]"; color: #ff2f6f; text-shadow: 0px 0px 2px #ffcfde; }
+.chat-item>.x-video::before{ content: "[영상]"; color: #ff2f6f; text-shadow: 0px 0px 2px #ffcfde; }
+.room-user-title>.x-video::before{ content: "[영상]"; color: #ff2f6f; text-shadow: 0px 0px 2px #ffcfde; }
+.x-bj .users-name::before{ content: "[BJ]"; color: #001eff; text-shadow: 0px 0px 2px #7d8cff; }
+.chat-item>.x-bj::before{ content: "[BJ]"; color: #001eff; text-shadow: 0px 0px 2px #7d8cff; }
+.room-user-title>.x-bj::before{ content: "[BJ]"; color: #001eff; text-shadow: 0px 0px 2px #7d8cff; }
+.x-yt .users-name::before{ content: "[YT]"; color: #ff0030; text-shadow: 0px 0px 2px #ff9aad; }
+.chat-item>.x-yt::before{ content: "[YT]"; color: #ff0030; text-shadow: 0px 0px 2px #ff9aad; }
+.room-user-title>.x-yt::before{ content: "[YT]"; color: #ff0030; text-shadow: 0px 0px 2px #ff9aad; }
+.x-tw .users-name::before{ content: "[TW]"; color: #931ebe; text-shadow: 0px 0px 2px #eab3ff; }
+.chat-item>.x-tw::before{ content: "[TW]"; color: #931ebe; text-shadow: 0px 0px 2px #eab3ff; }
+.room-user-title>.x-tw::before{ content: "[TW]"; color: #931ebe; text-shadow: 0px 0px 2px #eab3ff; }
+.x-word .users-name::before{ content: "[단어]"; color: #e155bb; text-shadow: 0px 0px 2px #f2a9de; }
+.chat-item>.x-word::before{ content: "[단어]"; color: #e155bb; text-shadow: 0px 0px 2px #f2a9de; }
+.room-user-title>.x-word::before{ content: "[단어]"; color: #e155bb; text-shadow: 0px 0px 2px #f2a9de; }
+.x-vip .users-name::before{ content: "[VIP]"; color: #FFD700; text-shadow: 0px 0px 2px #FFD700; }
+.chat-item>.x-vip::before{ content: "[VIP]"; color: #FFD700; text-shadow: 0px 0px 2px #FFD700; }
+.room-user-title>.x-vip::before{ content: "[VIP]"; color: #FFD700; text-shadow: 0px 0px 2px #FFD700; }
 
 .x-red_name{ color: #FF3333; }
 .x-orange_name{ color: #FFA533; }

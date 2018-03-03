@@ -42,7 +42,7 @@ block Subject
 	
 block JS
 	script(type='text/javascript', src='/js/in_game_kkutu.min.js')
-	script(src='https://www.google.com/recaptcha/api.js')
+	script(type='text/javascript', src='/js/fabric.min.js')
 	
 block CSS
 	link(rel='stylesheet', href='/css/in_game_kkutu_shop.css')
@@ -131,13 +131,13 @@ block Middle
 			button#lb-next(style='margin-right: 6px;')= L('nextPage')
 			button#lb-me= L('myRank')
 			button#lb-prev= L('prevPage')
-	+Dialog('QuickDiag', 300, 230, L('quickRoom'))
+	+Dialog('QuickDiag', 300, 270, L('quickRoom'))
 		div.dialog-bar
 			h4= L('gameMode')
 			select#quick-mode
 				- for(var i in locals.MODE)
 					option(value=Number(i))= L('mode' + locals.MODE[i])
-		div.dialog-bar(style='height: 59px;')
+		div.dialog-bar(style='height: 80px;')
 			h4(style='height: 45px;')= L('misc')
 			- for(var i in locals.OPTIONS)
 				+GameOption(i, 'quick')
@@ -147,7 +147,7 @@ block Middle
 			h4(style='width: 100%; height: 20px;')#quick-queue
 		div.dialog-bar.tail-button
 			button#quick-ok= L('OK')
-	+Dialog('RoomDiag', 300, 375)
+	+Dialog('RoomDiag', 300, 425)
 		div.dialog-bar
 			h4= L('roomTitle')
 			input#room-title(placeholder=(nick || L('guest'))+L('roomDefault'), maxlength=20)
@@ -177,15 +177,16 @@ block Middle
 				option(value=90)
 				option(value=120)
 				option(value=150)
-		div.dialog-bar(style='height: 59px;')
-			h4(style='height: 45px;')= L('misc')
+				option(value=180)
+		div.dialog-bar(style='height: 95px;')
+			h4(style='height: 75px;')= L('misc')
 			- for(var i in locals.OPTIONS)
 				+GameOption(i, 'room')
 			div.dialog-opt#room-injpick-panel
 				button#room-injeong-pick(style='font-size: 11px;')= L('pickInjeong')
 		div.dialog-bar.tail-button
 			button#room-ok= L('OK')
-	+Dialog('InjPickDiag', 200, 400, L('pickInjeong'))
+	+Dialog('InjPickDiag', 200, 450, L('pickInjeong'))
 		h4= L('explInjPick')
 		div.dialog-bar
 			button#injpick-all= L('injpickAll')
@@ -248,13 +249,7 @@ block Middle
 			input#dict-input(style='width: 183px;', placeholder=L('wpInput'), maxlength=200)
 		div.dialog-bar#dict-output(style='height: 195px; overflow-y: scroll; color: #BBBBBB; background-color: #111111;')
 		div.dialog-bar.tail-button
-			select#dict-theme(style='width: 86px;')
-				option(value="")= L('pickInjeong')
-				- locals.KO_INJEONG.forEach(function(item){
-					option(value=item)= L('theme_' + item)
-				- });
 			button#dict-search= L('SEARCH')
-			button#dict-injeong= L('injeongReq')
 	+Dialog('InviteDiag', 300, 420, L('invite'))
 		div.invite-board(style='height: 355px; overflow-y: scroll;')
 		div.dialog-bar.tail-button
@@ -369,6 +364,45 @@ block Middle
 					+GraphBar('jjo-round-time')
 			div.items
 			div.hints(style='display: none;')
+			div.tools(style='display: none;')
+				div(style="width: 100%")
+					div(style="float: left; width: 35%;")
+						span#themeis= L('themeis')
+					div(style="float: left; width: 65%;")
+						span#themeis-title
+				div(style="width: 100%")
+					div(style="float: left; width: 35%;")
+						span#drawing= L('wordis')
+					div(style="float: left; width: 65%;")
+						span#drawing-title
+				div(style="width: 100%")
+					label(for="drawing-line-width")= L('drawingLineWidth')
+					input#drawing-line-width(type="range", value="1", min="1", max="40")
+				.palette
+					div
+						button.button-color#color-red
+					div
+						button.button-color#color-orange
+					div
+						button.button-color#color-yellow
+					div
+						button.button-color#color-green
+					div
+						button.button-color#color-blue
+					div
+						button.button-color#color-indigo
+					div
+						button.button-color#color-violet
+					div
+						button.button-color#color-black
+					div
+						button.button-color#color-white
+				div(style="width: 100%")
+					div(style="float: left; width: 60%;")
+						label(for="drawing-color")= L('drawingColor')
+						input#drawing-color(type="color", value="#000000")
+					div(style="float: left; width: 40%;")
+						button#drawing-clear= L('drawingClear')
 			div.chain
 			div.rounds
 			div.history-holder
@@ -380,7 +414,6 @@ block Middle
 		div#Chat
 		input#Talk(maxlength=200)
 		button#ChatBtn= L('send')
-	div#ad
 
 block Bottom
 	div#facebook-menu

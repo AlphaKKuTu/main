@@ -1,0 +1,18 @@
+extends layout
+
+block Subject
+	title= L('status')
+	
+block CSS
+	link(rel='stylesheet', href='/css/in_game_kkutu.css')
+
+block Middle
+	+separator(5)
+	div.server-list-box
+		h3.server-list-title
+			a#server-refresh
+				+FA('refresh')
+				+Expl(L('serverRefresh'))
+			label= L('serverList')
+			label#server-total(style='color: #AAA; font-size: 13px;')
+		div#server-list
