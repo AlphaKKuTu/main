@@ -57,4 +57,92 @@ TypeError: $c.drawingCanvas is not a function
     at C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:508:14
     at Receiver.flush (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:347:3)
     at Receiver.finish (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:541:12)
-    at Receiver.expectHandler (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:493:33)
+    at Receiver.expectHandler (C:\Users\jioo0\Desktop\node.js\anotherkkutu\Server\lib\node_modules\ws\lib\Receiver.js:493:33):8496 [2018-3-18 15:49:01] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8497 [2018-3-18 15:49:01] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8496 [2018-3-18 15:49:16] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8497 [2018-3-18 15:49:16] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8496 [2018-3-18 15:49:26] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8497 [2018-3-18 15:49:26] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8496 [2018-3-18 15:49:37] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3):8497 [2018-3-18 15:49:37] ERROR: Error: Cannot find module '../const'
+Error: Cannot find module '../const'
+    at Function.Module._resolveFilename (module.js:555:15)
+    at Function.Module._load (module.js:482:25)
+    at Module.require (module.js:604:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (C:\Users\jioo0\Desktop\node.js\hatty163_kkutu\Server\lib\Game\games\drawing.js:25:15)
+    at Module._compile (module.js:660:30)
+    at Object.Module._extensions..js (module.js:671:10)
+    at Module.load (module.js:573:32)
+    at tryModuleLoad (module.js:513:12)
+    at Function.Module._load (module.js:505:3)

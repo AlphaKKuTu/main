@@ -22,6 +22,7 @@ $lib.Drawing.roundReady = function (data, spec) {
   clearBoard()
   $('.jjoriping,.rounds,.game-body').addClass('cw')
   $('.jjoriping,.rounds').addClass('dg')
+  $('.game-user-drawing').removeClass('game-user-drawing')
   $stage.game.tools.hide()
   $data._relay = false
   $data._roundTime = $data.room.time * 1000
@@ -35,6 +36,7 @@ $lib.Drawing.roundReady = function (data, spec) {
   } else {
     $data._isPainter = false
   }
+  $('#game-user-' + data.painter).addClass('game-user-drawing')
   drawRound(data.round)
   playSound('round_start')
   clearInterval($data._tTime)
@@ -138,8 +140,14 @@ $lib.Drawing.turnStart = function (data, spec) {
   playBGM('jaqwi')
 }
 $lib.Drawing.turnHint = function (data) {
+  var hint
+  if (Array.isArray(data.hint)) {
+    hint = L['theme_' + data.hint[0]]
+  } else {
+    hint = data.hint
+  }
   playSound('mission')
-  pushHint(data.hint)
+  pushHint(hint)
 }
 $lib.Drawing.turnEnd = function (id, data) {
   var $sc = $('<div>').addClass('deltaScore').html('+' + data.score)

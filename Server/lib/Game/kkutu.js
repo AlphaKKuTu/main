@@ -286,7 +286,7 @@ exports.Client = function(socket, profile, sid){
 	socket.on('message', function(msg){
 		var data, room = ROOM[my.place];
 		
-		JLog.log(`Chan @${channel} Msg #${my.id}: ${msg}`);
+		JLog.log(`Chan @${channel} Msg #${my.id}: ${(JSON.parse(msg).type === 'drawingCanvas' ? 'is drawing data' : msg)}`);
 		try{ data = JSON.parse(msg); }catch(e){ data = { error: 400 }; }
 		if(Cluster.isWorker) process.send({ type: "tail-report", id: my.id, chan: channel, place: my.place, msg: data.error ? msg : data });
 		
@@ -1241,6 +1241,8 @@ exports.Room = function(room, channel){
 		clearTimeout(my.game.turnTimer);
 		clearTimeout(my.game.hintTimer);
 		clearTimeout(my.game.hintTimer2);
+		if (my.game.hintTimer3) clearTimeout(my.game.hintTimer3)
+ 		if (my.game.hintTimer4) clearTimeout(my.game.hintTimer4)
 		clearTimeout(my.game.qTimer);
 	};
 	my.roundEnd = function(data){
@@ -1528,6 +1530,12 @@ function getRewards(mode, score, bonus, rank, all, ss){
 		case 'ESS':
 			rw.score += score * 0.22;
 			break;
+		case 'KDG':
+ 			rw.score += score * 0.57;
+ 			break;
+		case 'EDG':
+ 			rw.score += score * 0.57;
+ 			break;
 		default:
 			break;
 	}

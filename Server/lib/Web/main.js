@@ -61,7 +61,11 @@ Server.use(Exession({
 	}),
 	secret: 'kkutu',
 	resave: false,
-	saveUninitialized: true
+	saveUninitialized: true,
+	cookie: {
+		maxAge: 3600 * 12,
+		httpOnly: true
+	}
 }));
 Server.use(passport.initialize());
 Server.use(passport.session());

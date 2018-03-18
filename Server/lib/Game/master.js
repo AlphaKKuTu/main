@@ -26,7 +26,8 @@ var KKuTu = require('./kkutu');
 var GLOBAL = require("../sub/global.json");
 var Const = require("../const");
 var JLog = require('../sub/jjlog');
-var Recaptcha = require('../sub/recaptcha'); 
+var Recaptcha = require('../sub/recaptcha');
+var request = require('request')
 
 var MainDB;
 
@@ -164,6 +165,67 @@ function narrateFriends(id, friends, stat){
 		}
 	});
 }
+
+const lastChatMap = {};
+/*
+{
+  "id": {
+    "lastKey": keydown 에서 나온 것,
+	"lastChat": chat 에서 나온 것
+	"keyTime": lastKey 가 입력된 시간 (부정확)
+  },
+  ...
+}
+*/
+
+const BETWEEN_CHAT_MINIUM_MILLIS = 100;
+const MINIUM_CHAR_COUNT_PER_CHAT = 4;
+
+const KEY_CODES = {
+	'F12': 123,
+	'Backspace': 8,
+	'VK_PACKET': 231
+}
+
+function cheatDetection (id, place, msg) {
+	let lastChatMap = msg.lastChatMap
+
+	let message = createDetectedMessage(msg.detectTypeText, msg.hasBetweenTime);
+	sendTelegramMessage(message)
+
+	function createDetectedMessage(detectTypeText, hasBetweenTime) {
+		let currentTime = new Date();
+		let formattedDate = currentTime.toISOString().replace(/T/, '').replace(/\..+/, '');
+
+		let detail;
+		if (hasBetweenTime) {
+			let betweenTime = currentTime - msg.timestamp;
+			detail = lastChatMap.lastKey + ' → ' + msg.value + ' (' + betweenTime + 'ms)';
+		} else {
+			detail = lastChatMap.lastChat + ' → ' + msg.value;
+		}
+
+		return '`비 인가 프로그램` 사용 의심 유저가 발견되었습니다.\n\n' + 
+			'감지 정보 : ' + detectTypeText + '\n' +
+			'세부 내용 : ' + detail + '\n' +
+			'고유 번호 : ' + id + '\n' +
+			'방	번호 : ' + (place === 0 ? '로비' : place) + '\n' +
+			'감지 시각 : ' + formattedDate;
+	}
+
+	function sendTelegramMessage(message) {
+		let body = {
+			text: message
+		}
+		request(GLOBAL.SLACK_URL, { method: 'POST', body: body, json: true }, (err, res, body) => {
+			if(err) JLog.error(err);
+			else {
+				JLog.info('success report');
+			}
+		})
+	}
+}
+
 Cluster.on('message', function(worker, msg){
 	var temp;
 	
@@ -362,7 +424,7 @@ exports.init = function(_SID, CHAN){
 						DNAME[($c.profile.title || $c.profile.name).replace(/\s/g, "")] = $c.id;
 						MainDB.users.update([ '_id', $c.id ]).set([ 'server', SID ]).on();
 						
-						if ($c.guest) {
+						if (($c.guest && GLOBAL.GOOGLE_RECAPTCHA_TO_GUEST) || GLOBAL.GOOGLE_RECAPTCHA_TO_USER) {
 							$c.socket.send(JSON.stringify({
 								type: 'recaptcha',
 								siteKey: GLOBAL.GOOGLE_RECAPTCHA_SITE_KEY
@@ -378,7 +440,7 @@ exports.init = function(_SID, CHAN){
 						});
 						$c._error = ref.result;
 						$c.socket.close();
-						// JLog.info("Black user #" + $c.id);
+						JLog.info("Black user #" + $c.id);
 					}
 				});
 			});
@@ -580,6 +642,9 @@ function processClientRequest($c, msg) {
 		*/
 		case 'test':
 			checkTailUser($c.id, $c.place, msg);
+			break;
+		case 'cheat-detected':
+			cheatDetection($c.id, $c.place, msg);
 			break;
 		default:
 			break;
