@@ -19,7 +19,6 @@ extends layout
 
 block Subject
 	title= L('title')
-
 block CSS
 	link(rel='stylesheet', href='/css/in_game_kkutu.css')
 
@@ -31,9 +30,9 @@ block Middle
 		div(style='margin-bottom: -110px; padding-left: 70px;')
 			h3#holder= L('title').replace(/\[.+?\]/g, "")
 			img#logo(src='/img/kkutu/short_logo.png')
-		img.jjoObj.jjoEyeL(src='/img/jjoeyeL.png', style='left: 0px; margin-top: 40px;')
-		img.jjoObj.jjoNose(src='/img/jjonose.png', style='left: 100px; margin-bottom: -5px; margin-top: 40px;')
-		img.jjoObj.jjoEyeR(src='/img/jjoeyeR.png', style='left: 200px; margin-top: 40px;')
+		img.jjoObj.jjoEyeL(src='/img/jjoeyeL.png', style='left: 0px; margin-bottom: -10px; margin-top: 40px;')
+		img.jjoObj.jjoNose(src='/img/jjonose.png', style='left: 100px; margin-bottom: -10px; margin-top: 40px;')
+		img.jjoObj.jjoEyeR(src='/img/jjoeyeR.png', style='left: 200px; margin-bottom: -10px; margin-top: 40px;')
 		a(href=L('svstart'))
 			div.jjoDisplayBar(style='margin: 0 auto; width: 325px; height: 85px;')
 				button#game-start.jjo-display= L('gameStart')
@@ -44,6 +43,10 @@ block Middle
 		br
 		a(href='https://cafe.naver.com/kkutunet', target='_blank')
 			img#discord(src='/img/kkutu/ko_KR/navercafe.png', width="150px")
+		a(href='https://hatty1631.typeform.com/to/hXllLo', target='_blank')
+			img#discord(src='/img/kkutu/ko_KR/donate.png', width="150px")
+		a(href='https://open.kakao.com/o/gq2eRpJ', target='_blank')
+			img#discord(src='/img/kkutu/ko_KR/kakao.png', width="150px")
 		h3.server-list-title
 			a#server-refresh
 				+FA('refresh')
@@ -54,7 +57,7 @@ block Middle
 
 	div(style='float: right; width: calc(50% - 78px);')
 		div(style='float: right; width: 100% ; background-color: #00D8FF; color: black;')
-			font(size=2, style='color: white;') &nbsp;끄투닷넷 공지사항
+			font(size=2, style='color: white;') &nbsp;끄투닷넷 업데이트 내역
 		br
 		div(style='float: right; width: 100%; background-color: #FFFFFF;')
 			iframe#kkutu-bulletin(width='100%', height='400px', src='/notice.html')
@@ -64,10 +67,18 @@ block Middle
 			font(size=2, style='color: white;') &nbsp;끄투닷넷 이벤트
 		br
 		div(style='float: right; width: 100%; background-color: #FFFFFF;')
-			iframe#kkutu-bulletin(width='100%', height='400px', src='/event.html')
+			iframe#kkutu-bulletin(width='100%', height='250px', src='/event.html')
+	div(style='float: left; width: calc(50% - 80px); margin-left: 5px;')
+		div(style='float: right; width: 100% ; background-color: #00D8FF; color: black;')
+			font(size=2, style='color: white;') &nbsp;끄투닷넷 공지사항
+		br
+		div(style='float: right; width: 100%; background-color: #FFFFFF;')
+			iframe#kkutu-bulletin(width='100%', height='121.5px', src='/kkt_notice.html')
 	+separator(10)
+	+Product('AD')
+		script(data-cfasync='false', type='text/javascript', src='http://www.onclickmega.com/a/display.php?r=1929459')
 
-block Bottom
+block Bottom	
 	div.bottom-legal!= L('dictionarySupport')
 	block Bottom
 	script.

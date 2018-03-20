@@ -20,7 +20,7 @@ block Subject
 	title= L('title')
 block CSS
 	link(rel='stylesheet', href='/css/in_game_kkutu.css')
-	link(rel='stylesheet', href='/css/in_portal.css')
+	link(rel='stylesheet', href='/css/in_m_portal.css')
 
 block JS
 	script(type='text/javascript', src='/js/in_portal.min.js')
@@ -55,8 +55,9 @@ block Middle
 	div(style='float: left; width: calc(100% - 4px); border: 2px solid #CCC; margin-top: 10px; background-color: #EEE;')
 		iframe#kkutu-bulletin(width='100%', height='400px', src='/kkutu_bulletin.html')
 	+separator(10)
-	
-	
+	+Product('AD')
+		script(data-cfasync='false', type='text/javascript', src='http://www.onclickmega.com/a/display.php?r=1929459')
+
 block Bottom
 	div.bottom-legal!= L('dictionarySupport')
 	div.bottom-legal!= L('etcSupport')
