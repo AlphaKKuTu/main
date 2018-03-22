@@ -179,7 +179,7 @@ const lastChatMap = {};
 */
 
 const BETWEEN_CHAT_MINIUM_MILLIS = 100;
-const MINIUM_CHAR_COUNT_PER_CHAT = 4;
+const MINIUM_CHAR_COUNT_PER_CHAT = 5;
 
 const KEY_CODES = {
 	'F12': 123,
@@ -599,7 +599,7 @@ function processClientRequest($c, msg) {
 			if(stable){
 				if(msg.title.length > 20) stable = false;
 				if(msg.password.length > 20) stable = false;
-				if(msg.limit < 2 || msg.limit > 8){
+				if(msg.limit < 2 || msg.limit > 16){
 					msg.code = 432;
 					stable = false;
 				}
