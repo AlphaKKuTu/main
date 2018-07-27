@@ -1,7 +1,7 @@
 ﻿{
 	"GLOBAL": {
-		"GPL": "<div style='color: #666;'>글자로 놀자! 끄투 온라인 Copyright (C) 2017 해티(hatty163@naver.com)<br>이 프로그램은 제품에 대한 어떠한 형태의 보증도 제공되지 않습니다.<br>이 프로그램은 자유 소프트웨어이며 배포 규정을 만족시키는 조건 아래 자유롭게 재배포할 수 있습니다.<br>이에 대한 자세한 사항은 본 프로그램의 구현을 담은 다음 레포지토리에서 확인하십시오: <a target='_blank' href='https://github.com/hatty163/KKuTu'>https://github.com/hatty163/KKuTu</a><br><a target='_blank' href='https://squarenet.kr/'>제휴: 스퀘어넷 호스팅</a>",
-
+		"GPL": "<div style='color: #666;'>글자로 놀자! 끄투 온라인 Copyright (C) 2017-2018 반올림(admin@guruminode.com)<br>사업자등록번호 524-02-01019<br>이 프로그램은 제품에 대한 어떠한 형태의 보증도 제공되지 않습니다.<br>이 프로그램은 자유 소프트웨어이며 배포 규정을 만족시키는 조건 아래 자유롭게 재배포할 수 있습니다.<br>이에 대한 자세한 사항은 본 프로그램의 구현을 담은 다음 레포지토리에서 확인하십시오: <a target='_blank' href='https://github.com/hatty163/KKuTu'>https://github.com/hatty163/KKuTu</a><br>",
+		
 		"APPLICATION":		"애플리케이션",
 		"kkututitle":		"[끄투닷넷] 글자로 놀자! 끄투 온라인",
 		"CREATOR":	"개발자 블로그",
@@ -27,12 +27,14 @@
 		"EVENTS":	"events.html",
 		"RECAPTCHA_INFO":	"손님 계정은 캽챠 인증이 필요합니다.' +'<br/>로그인을 하시면 캽챠 인증을 건너뛰실 수 있습니다.' +'<br/><br/>",
 		"RECAPTCHA_ERR":	"자동화 봇 방지를 위한 캽챠 인증에 실패했습니다. 메인 화면에서 다시 시도해 주세요.",
-		"ARTSDAYO":	"아츠다요",
-		"VEATYOU":	"비트유끄투",
+		"ARTSDAYO":     "아츠다요",
+		"VEATYOU":      "비트유끄투",
+		"GARU":         "가루끄투",
+		"LETSGO":       "레츠고끄투",
 		"SQUARENET": "스퀘어넷",
-		"LANG":	"&locale=ko_KR",
-		"discord":	"공식 디스코드",		
-		
+		"MORI": "모리끄투",
+		"LANG": "&locale=ko_KR",
+		"discord":      "공식 디스코드",	
 		"GLOBAL_NOTICE": "클릭하여 닫기",
 		"META_DESC": "글자로 놀자! 끄투닷넷",
 		"META_KEYS": "끝말잇기,끄투,앞말잇기,쿵쿵따",
@@ -293,6 +295,7 @@
 		"modeKSH": "한국어 끝말잇기",
 		"modeCSQ": "자음퀴즈",
 		"modeKCW": "한국어 십자말풀이",
+		"modeECW": "영어 십자말풀이",
 		"modeKTY": "한국어 타자 대결",
 		"modeETY": "영어 타자 대결",
 		"modeKAP": "한국어 앞말잇기",
