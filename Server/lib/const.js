@@ -203,6 +203,14 @@ exports.RULE = {
 	  ai: false,
 	  big: true,
 	  ewq: true
+	},
+	'ECW': { lang: "en",
+		rule: "Crossword",
+		opts: [ "olb" ],
+		time: 2,
+		ai: false,
+		big: true,
+		ewq: false
 	}
 };
 exports.getPreScore = function(text, chain, tr){
