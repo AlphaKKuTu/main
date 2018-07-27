@@ -5,3 +5,5 @@ Server/lib/node_modules
 Server/lib/sub/auth.json
 Server/lib/sub/global.json
 Server/lib/KKUTU_ERROR.log
+Server/lib/Web/public/img/*
+Server/lib/Web/public/media/*
