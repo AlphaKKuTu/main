@@ -83,6 +83,9 @@ Server.use((req, res, next) => {
 		next();
 	}
 });
+if (GLOBAL.TRUST_PROXY) {
+	Server.set('trust proxy', GLOBAL.TRUST_PROXY)
+}
 WebInit.init(Server, true);
 DB.ready = function(){
 	setInterval(function(){
