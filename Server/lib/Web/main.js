@@ -111,7 +111,7 @@ DB.ready = function(){
 			}
 		}
 	});
-	Server.listen(80);
+	Server.listen(GLOBAL.WEB_PORT);
 	if(Const.IS_SECURED) {
 		const options = {};
 		if(Const.SSL_OPTIONS.isPFX == true) {
@@ -123,7 +123,7 @@ DB.ready = function(){
 				options.ca = fs.readFileSync(Const.SSL_OPTIONS.CA);
 			}
 		}
-		https.createServer(options, Server).listen(443);
+		https.createServer(options, Server).listen(GLOBAL.SSL_PORT);
 	}
 };
 Const.MAIN_PORTS.forEach(function(v, i){
