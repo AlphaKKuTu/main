@@ -49,7 +49,7 @@ WebInit.MOBILE_AVAILABLE = [
 
 require("../sub/checkpub");
 
-JLog.info("<< KKuTu Web >>");
+JLog.info("[ AlphaKKuTu | Web Server ]");
 Server.set('views', __dirname + "/views");
 Server.set('view engine', "pug");
 Server.use(Express.static(__dirname + "/public"));
