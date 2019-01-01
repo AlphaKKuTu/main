@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>끄투 이벤트</title>
+<style>
+body{
+	font-family: 나눔바른고딕, 맑은 고딕, 돋움;
+}
+li{
+	font-size: 13px;
+}
+</style>
+<script type="text/javascript">
+var bDisplay = true;
+function doDisplay(){
+    var con = document.getElementById("Event");
+    if(con.style.display=='none'){
+        con.style.display = 'block';
+    }else{
+        con.style.display = 'none';
+    }
+}
+</script>
+	</head>
+	<body style="height: 100%;">
+		<h3>알파끄투 오픈 기념 이벤트</h3>
+    <a href="javascript:doDisplay();"자세히 보기</a><br/><br/>
+		<div id="Event">
+      <ul>
+		   	<li>이벤트 상세 정보 준비중</li>
+	  	</ul>
+		  <hr>
+</body></html>
