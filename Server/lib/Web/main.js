@@ -212,7 +212,7 @@ Server.get("/", function(req, res){
 			'_id': id,
 			'PORT': Const.MAIN_PORTS[server],
 			'HOST': req.hostname,
-			'PROTOCOL': Const.IS_SECURED ? 'wss' : 'ws',
+			'PROTOCOL': Const.IS_WSS ? 'wss' : 'ws',
 			'TEST': req.query.test,
 			'MOREMI_PART': Const.MOREMI_PART,
 			'AVAIL_EQUIP': Const.AVAIL_EQUIP,
