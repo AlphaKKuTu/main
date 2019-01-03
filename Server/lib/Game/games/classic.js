@@ -468,8 +468,6 @@ function getAuto(char, subc, type){
 			if(my.opts.loanword) aqs.push([ 'flag', { '$nand': Const.KOR_FLAG.LOANWORD } ]);
 			if(my.opts.strict) aqs.push([ 'type', Const.KOR_STRICT ], [ 'flag', { $lte: 3 } ]);
 			else aqs.push([ 'type', Const.KOR_GROUP ]);
-		}else if(my.rule.lang == "en"){
-			aqs.push([ '_id', Const.ENG_ID ]);
 		}else{aqs.push([ '_id', Const.ENG_ID ]);}
 		switch(type){
 			case 0:
@@ -528,10 +526,10 @@ function getChar(text){
 	switch(Const.GAME_TYPE[my.mode]){
 		case 'EKT': return text.slice(text.length - 3);
 		case 'ESH':
+		case 'EAP':
 		case 'KKT':
 		case 'KSH': return text.slice(-1);
 		case 'KAP': return text.charAt(0);
-		case 'EAP':
 	}
 };
 function getSubChar(char){
