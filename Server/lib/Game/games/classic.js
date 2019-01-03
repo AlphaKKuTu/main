@@ -67,6 +67,9 @@ exports.getTitle = function(){
 			ja = 44032 + 588 * Math.floor(Math.random() * 18);
 			eng = "[\\u" + ja.toString(16) + "-\\u" + (ja + 587).toString(16) + "]$";
 			break;
+		case 'EAP':
+			eng = String.fromCharCode(97 + Math.floor(Math.random() * 26)) + "$";
+			break;
 	}
 	function tryTitle(h){
 		if(h > 50){
@@ -100,7 +103,7 @@ exports.getTitle = function(){
 		var i, list = [];
 		var len;
 		
-		/* ∫Œ«œ∞° ≥ π´ ∞…∏∞¥Ÿ∏È ¡÷ºÆ¿ª «Æ¿⁄.
+		/* Î∂ÄÌïòÍ∞Ä ÎÑàÎ¨¥ Í±∏Î¶∞Îã§Î©¥ Ï£ºÏÑùÏùÑ ÌíÄÏûê.
 		R.go(true);
 		return R;
 		*/
@@ -297,7 +300,7 @@ exports.submit = function(client, text){
 		if(!text) return false;
 		if(text.length <= l) return false;
 		if(my.game.wordLength && text.length != my.game.wordLength) return false;
-		if(type == "KAP") return (text.slice(-1) == char) || (text.slice(-1) == subChar);
+		if(type == "KAP"||type=="EAP") return (text.slice(-1) == char) || (text.slice(-1) == subChar);
 		switch(l){
 			case 1: return (text[0] == char) || (text[0] == subChar);
 			case 2: return (text.substr(0, 2) == char);
@@ -306,7 +309,7 @@ exports.submit = function(client, text){
 		}
 	}
 	DB.kkutu[l].findOne([ '_id', text ],
-		(l == "ko") ? [ 'type', Const.KOR_GROUP ] : [ '_id', Const.ENG_ID ]
+		(l == "ko") ? [ 'type', Const.KOR_GROUP ] : (l == "en") ? [ '_id', Const.ENG_ID ] : [ '_id', Const.ENG_ID ]
 	).on(onDB);
 };
 exports.getScore = function(text, delay, ignoreMission){
@@ -330,15 +333,11 @@ exports.readyRobot = function(robot){
 	var delay = ROBOT_START_DELAY[level];
 	var ended = {};
 	var w, text, i;
-	var lmax;
-	var isRev = Const.GAME_TYPE[my.mode] == "KAP";
-	
+	var lmax;	
 	getAuto.call(my, my.game.char, my.game.subChar, 2).then(function(list){
 		if(list.length){
 			list.sort(function(a, b){ return b.hit - a.hit; });
-			if(ROBOT_HIT_LIMIT[level] > list[0].hit) denied();
-			else{
-				if(level >= 3 && !robot._done.length){
+			if(ROBOT_HIT_LIMIT[level] > list[0].hit) denied();				if(level >= 3 && !robot._done.length){
 					if(Math.random() < 0.5) list.sort(function(a, b){ return b._id.length - a._id.length; });
 					if(list[0]._id.length < 8 && my.game.turnTime >= 2300){
 						for(i in list){
@@ -360,7 +359,7 @@ exports.readyRobot = function(robot){
 		}else denied();
 	});
 	function denied(){
-		text = isRev ? `${my.game.char} §–§–` : `${my.game.char} §–§–`;
+		text = isRev ? `${my.game.char} „Ö†„Ö†` : `${my.game.char} „Ö†„Ö†`;
 		after();
 	}
 	function pickList(list){
@@ -405,16 +404,16 @@ exports.readyRobot = function(robot){
 	}
 };
 function getMission(l){
-	var arr = (l == "ko") ? Const.MISSION_ko : Const.MISSION_en;
+	var arr = (l == "ko") ? Const.MISSION_ko : (l == "en") ? Const.MISSION_en;
 	
 	if(!arr) return "-";
 	return arr[Math.floor(Math.random() * arr.length)];
 }
 function getAuto(char, subc, type){
 	/* type
-		0 π´¿€¿ß ¥‹æÓ «œ≥™
-		1 ¡∏¿Á ø©∫Œ
-		2 ¥‹æÓ ∏Ò∑œ
+		0 Î¨¥ÏûëÏúÑ Îã®Ïñ¥ ÌïòÎÇò
+		1 Ï°¥Ïû¨ Ïó¨Î∂Ä
+		2 Îã®Ïñ¥ Î™©Î°ù
 	*/
 	var my = this;
 	var R = new Lizard.Tail();
@@ -441,11 +440,14 @@ function getAuto(char, subc, type){
 		case 'KAP':
 			adv = `.(${adc})$`;
 			break;
+		case 'EAP':
+			adv = `^(${adc})...`;
+			break;
 	}
 	if(!char){
 		console.log(`Undefined char detected! key=${key} type=${type} adc=${adc}`);
 	}
-	MAN.findOne([ '_id', char || "°⁄" ]).on(function($mn){
+	MAN.findOne([ '_id', char || "‚òÖ" ]).on(function($mn){
 		if($mn && bool){
 			if($mn[key] === null) produce();
 			else R.go($mn[key]);
@@ -463,9 +465,9 @@ function getAuto(char, subc, type){
 			if(my.opts.loanword) aqs.push([ 'flag', { '$nand': Const.KOR_FLAG.LOANWORD } ]);
 			if(my.opts.strict) aqs.push([ 'type', Const.KOR_STRICT ], [ 'flag', { $lte: 3 } ]);
 			else aqs.push([ 'type', Const.KOR_GROUP ]);
-		}else{
+		}else if(my.rule.lang == "en"){
 			aqs.push([ '_id', Const.ENG_ID ]);
-		}
+		}else{aqs.push([ '_id', Const.ENG_ID ]);}
 		switch(type){
 			case 0:
 			default:
@@ -526,6 +528,7 @@ function getChar(text){
 		case 'KKT':
 		case 'KSH': return text.slice(-1);
 		case 'KAP': return text.charAt(0);
+		case 'EAP':
 	}
 };
 function getSubChar(char){
@@ -545,12 +548,12 @@ function getSubChar(char){
 			ca = [ Math.floor(k/28/21), Math.floor(k/28)%21, k%28 ];
 			cb = [ ca[0] + 0x1100, ca[1] + 0x1161, ca[2] + 0x11A7 ];
 			cc = false;
-			if(cb[0] == 4357){ // §©ø°º≠ §§, §∑
+			if(cb[0] == 4357){ // „ÑπÏóêÏÑú „Ñ¥, „Öá
 				cc = true;
 				if(RIEUL_TO_NIEUN.includes(cb[1])) cb[0] = 4354;
 				else if(RIEUL_TO_IEUNG.includes(cb[1])) cb[0] = 4363;
 				else cc = false;
-			}else if(cb[0] == 4354){ // §§ø°º≠ §∑
+			}else if(cb[0] == 4354){ // „Ñ¥ÏóêÏÑú „Öá
 				if(NIEUN_TO_IEUNG.indexOf(cb[1]) != -1){
 					cb[0] = 4363;
 					cc = true;
