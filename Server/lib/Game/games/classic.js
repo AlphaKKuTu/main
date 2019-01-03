@@ -337,7 +337,9 @@ exports.readyRobot = function(robot){
 	getAuto.call(my, my.game.char, my.game.subChar, 2).then(function(list){
 		if(list.length){
 			list.sort(function(a, b){ return b.hit - a.hit; });
-			if(ROBOT_HIT_LIMIT[level] > list[0].hit) denied();				if(level >= 3 && !robot._done.length){
+				if(ROBOT_HIT_LIMIT[level] > list[0].hit) denied();
+				else{
+					if(level >= 3 && !robot._done.length){
 					if(Math.random() < 0.5) list.sort(function(a, b){ return b._id.length - a._id.length; });
 					if(list[0]._id.length < 8 && my.game.turnTime >= 2300){
 						for(i in list){
