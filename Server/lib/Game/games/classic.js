@@ -333,7 +333,8 @@ exports.readyRobot = function(robot){
 	var delay = ROBOT_START_DELAY[level];
 	var ended = {};
 	var w, text, i;
-	var lmax;	
+	var lmax;
+	var isRev = (Const.GAME_TYPE[my.mode] == "KAP" || Const.GAME_TYPE[my.mode] == "EAP");
 	getAuto.call(my, my.game.char, my.game.subChar, 2).then(function(list){
 		if(list.length){
 			list.sort(function(a, b){ return b.hit - a.hit; });
