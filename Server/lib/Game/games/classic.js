@@ -406,7 +406,7 @@ exports.readyRobot = function(robot){
 	}
 };
 function getMission(l){
-	var arr = (l == "ko") ? Const.MISSION_ko : (l == "en") ? Const.MISSION_en;
+	var arr = (l == "ko") ? Const.MISSION_ko : Const.MISSION_en;
 	
 	if(!arr) return "-";
 	return arr[Math.floor(Math.random() * arr.length)];
