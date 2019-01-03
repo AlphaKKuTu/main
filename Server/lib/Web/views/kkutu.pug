@@ -401,6 +401,15 @@ block Middle
 		iframe#help-board(width=550, height=375)
 	+Dialog('BulletinDiag', 550, 400, L('bulletin'))
 		iframe#bulletin-board(width=550, height=375)
+	+Dialog('SetNick', 350, 155, L('setNick'))
+		| 알파끄투 사용하실 닉네임을 입력해주세요.
+		br
+		| 관리자를 사칭하는 닉네임은 사용할 수 없습니다.
+		br
+		b UnderC(ink0416@naver.com) 제작
+		input#nick(type='text')
+		div.dialog-bar.tail-button
+			button#SetNick-ok= L('OK')
 	+Product('UserList')
 		div 불러오는 중
 	+Product('RoomList')
