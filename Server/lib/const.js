@@ -216,7 +216,7 @@ exports.RULE = {
 		rule: "Classic",
 		opts: [ "man", "ext", "mis", "olb" ],
 		time: 1,
-		ai: true,
+		ai: false,
 		big: false,
 		ewq: true
 	}
