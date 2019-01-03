@@ -640,6 +640,22 @@ function processClientRequest($c, msg) {
 		case 'test':
 			checkTailUser($c.id, $c.place, msg);
 			break;
+		case "setNick":
+			MainDB.users.findOne(['_id', $c.id]).on(a => {
+				if (Number(a.expires) > new Date()) return $c.send('error', {value: 605})
+				if (msg.value) {
+					if (msg.value.match(/끄(|투)코(리아|)|(섹|쎅|셱|쎽|셲|쎾)(스|쓰)|(시|씨|쓰|씌|스|ㅅ|ㅆ)(벌|발|빨|뻘|ㅂ|ㅃ)|(병|뼝|등|뜽|ㅂ|ㅃ)(신|씬|ㅅ|ㅆ)|좆|(자|보)(지|찌)|ㅄ|sex|bitch/gi)){
+						return $c.send('error', {value: 604})
+					}
+					msg.value = mag.value.replace(/(<|>)/g, '').replace(/[^a-zㄱ-힣0-9| |_|?|!|@|#|$|%|^|&|*|(|)|-]/ig, '')
+					MainDB.users.findOne([ 'username', msg.value ]).on(($res) => {
+						if(!$res) MainDB.users.update(['_id', $c.id]).set(['username', msg.value], ['expires', new Date().setDate(new Date().getDate() + 7)]).on()
+						else $c.send('error', {value: 601})
+					})
+				}
+				else $c.send('error', {value: 602})
+			})
+			break
 		case 'cheat-detected':
 			cheatDetection($c.id, $c.place, msg);
 			break;

@@ -446,13 +446,16 @@ exports.Client = function(socket, profile, sid){
                                 return;
                             }
                         }
-                    }*/
+					}*/
+					my.username = $user.username
                     my.exordial = $user.exordial || "";
                     my.equip = $user.equip || {};
                     my.box = $user.box || {};
                     my.data = new exports.Data($user.kkutu);
                     my.money = Number($user.money);
-                    my.friends = $user.friends || {};
+					my.friends = $user.friends || {};
+					if (!my.username) my.send("setNick");
+					else my.profile.title = my.username
                     if (first) my.flush();
                     else {
                         my.checkExpire();
