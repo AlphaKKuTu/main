@@ -75,6 +75,14 @@ exports.RULE = {
 		ewq: 현재 턴 나가면 라운드 종료?
 	}
 */
+	'EAP': { lang: "en",
+		rule: "Classic",
+		opts: [ "man", "ext", "mis", "olb" ],
+		time: 1,
+		ai: true,
+		big: false,
+		ewq: true
+	},
 	'EKT': { lang: "en",
 		rule: "Classic",
 		opts: [ "man", "ext", "mis", "olb" ],
