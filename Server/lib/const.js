@@ -243,10 +243,18 @@ exports.KO_INJEONG = [
 	"MOB", "HYK", "CYP", "HRH", "STA", "OIJ",
 	"KGR", "ESB", "ELW", "OIM", "OVW", "NEX", /*"WOW",*/
 	"YRY", "KPO", "JLN", "JAN", "ZEL", "POK", "HAI",
-	"HSS", "KMV", "HDC", "HOS"
+	"HSS", "KMV", "HDC", "HOS", /* 하단은 가루끄투 자체주제 */
+	"DONG", "COC", "EMD", "GASA", 
+	"SOKDAM", "POWERKKT",  "SAJA", "CARS", "RUN", 
+	"MUDO", "ONEBAK", "INAZMA", "BMKW", "KSONG", "PIC", 
+	"SWK", "CKR", "SVN", "PUBG", 
+	"RID", "DSB", "HPT", "NCN", "ING", "WHY", "ATG",
+	"OPC", "BDR", "MCU", "HIS", "FAT", "GUD",
+	"EXTREAM", "YOKAI"
 ];
 exports.EN_INJEONG = [
-	"LOL"
+	"LOL", /* 하단은 가루끄투 자체주제 */
+	"ISAAC", "GMD", "HWA", "MUL" 
 ];
 exports.KO_THEME = [
 	"30", "40", "60", "80", "90",
