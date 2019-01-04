@@ -1,6 +1,6 @@
 ﻿{
 	"GLOBAL": {
-		"GPL": "<div style='color: #666;'>글자로 놀자! 끄투 온라인 Copyright (C) 2017-2018 GurumiNode(admin@guruminode.com)<br>사업자등록번호 524-02-01019<br>이 프로그램은 제품에 대한 어떠한 형태의 보증도 제공되지 않습니다.<br>이 프로그램은 자유 소프트웨어이며 배포 규정을 만족시키는 조건 아래 자유롭게 재배포할 수 있습니다.<br>이에 대한 자세한 사항은 본 프로그램의 구현을 담은 다음 레포지토리에서 확인하십시오: <a target='_blank' href='https://github.com/hatty163/KKuTu'>https://github.com/hatty163/KKuTu</a><br>",
+		"GPL": "<div style='color: #666;'>글자로 놀자! 끄투 온라인 Copyright (C) 2017-2018 GurumiNode(admin@guruminode.com)<br>사업자등록번호 524-02-01019<br>이 프로그램은 제품에 대한 어떠한 형태의 보증도 제공되지 않습니다.<br>이 프로그램은 자유 소프트웨어이며 배포 규정을 만족시키는 조건 아래 자유롭게 재배포할 수 있습니다.<br>이에 대한 자세한 사항은 본 프로그램의 구현을 담은 다음 레포지토리에서 확인하십시오: <a target='_blank' href='https://github.com/AlphaKKuTu/main'>https://github.com/AlphaKKuTu/main</a><br>",
 		
 		"SERVICE":		"서비스",
 		"kkututitle":		"[알파끄투] 글자로 놀자! 끄투 온라인",
